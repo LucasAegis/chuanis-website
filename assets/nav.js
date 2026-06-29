@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // 1. 智能判断当前页面的层级深度
     const currentPath = window.location.pathname.toLowerCase();
-    const isDeepFolder = currentPath.includes('/portfolio/');
+    const isDeepFolder =
+    currentPath.includes('/portfolio/') ||
+    currentPath.includes('/blueprints/');
     
     // 如果在深层，前缀就加 ../../；否则就用 ./
     const prefix = isDeepFolder ? '../../' : './';
