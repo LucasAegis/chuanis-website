@@ -1,16 +1,22 @@
 // assets/nav.js - CHUANIS 全局导航组件
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // 1. 智能判断当前页面的层级深度
+
+    // 1. 当前路径
     const currentPath = window.location.pathname.toLowerCase();
+
+    // 是否位于需要 ../../ 的目录
     const isDeepFolder =
-    currentPath.includes('/portfolio/') ||
-    currentPath.includes('/blueprints/');
-    
-    // 如果在深层，前缀就加 ../../；否则就用 ./
+        currentPath.includes('/portfolio/') ||
+        currentPath.includes('/blueprints/');
+
+    // 是否属于 Portfolio 的说明书详情页
+    const isPortfolioDetail =
+        currentPath.includes('/portfolio/');
+
+    // 前缀
     const prefix = isDeepFolder ? '../../' : './';
 
-    // 2. 导航栏骨架：字体大小已提升至 18px
+    // 2. 导航栏
     const navHTML = `
     <header class="global-navbar">
         <style>
@@ -32,28 +38,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-    // 3. 智能高亮逻辑
+    // 3. 智能高亮
     const navLinks = document.querySelectorAll('.nav-center a');
-    
+
     navLinks.forEach(link => {
         const pageName = link.getAttribute('data-page');
         link.classList.remove('active');
 
-        if (pageName === 'index' && (currentPath === '/' || currentPath.endsWith('index.html') && !isDeepFolder)) {
+        if (
+            pageName === 'index' &&
+            (currentPath === '/' ||
+                (currentPath.endsWith('index.html') && !isDeepFolder))
+        ) {
             link.classList.add('active');
-        } else if (pageName === 'portfolio' && currentPath.includes('portfolio.html')) {
+        } else if (
+            pageName === 'portfolio' &&
+            currentPath.includes('portfolio.html')
+        ) {
             link.classList.add('active');
-        } else if (pageName === 'blueprints' && currentPath.includes('/blueprints/')) {
+        } else if (
+            pageName === 'blueprints' &&
+            currentPath.includes('/blueprints/')
+        ) {
             link.classList.add('active');
-        } else if (pageName === 'contact' && currentPath.includes('contact.html')) {
+        } else if (
+            pageName === 'contact' &&
+            currentPath.includes('contact.html')
+        ) {
             link.classList.add('active');
         }
     });
 
-    // 4. 暴力修复说明书页面的高亮：在详情页只让 PORTFOLIO 亮
-    if (isDeepFolder) {
+    // 4. 只有 Portfolio 详情页才强制亮 Portfolio
+    if (isPortfolioDetail) {
         document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('active'));
+
         const pBtn = document.querySelector('.nav-center a[data-page="portfolio"]');
-        if (pBtn) pBtn.classList.add('active');
+
+        if (pBtn) {
+            pBtn.classList.add('active');
+        }
     }
 });
