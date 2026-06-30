@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stealth-Comm 物理层隐式通信架构白皮书 | CHUANIS BLUEPRINTS</title>
+    <meta name="description" content="极端环境下的零网络指令传输体系。解析在无通信信道、无高频载波条件下的确定性指令传输与状态同步架构。">
+    
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    
+    <link rel="stylesheet" href="../assets/background.css">
+    <link rel="stylesheet" href="../assets/nav.css">
+    
+    <style>
+        .whitepaper-container { display: flex; justify-content: center; padding: 100px 20px; position: relative; z-index: 10; }
+        .whitepaper-content { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 60px 80px; border-radius: 20px; max-width: 900px; width: 100%; backdrop-filter: blur(15px); color: #d2d0dd; line-height: 1.8; font-size: 16px; box-sizing: border-box; }
+        
+        .title-group { text-align: center; border-bottom: 1px solid rgba(136, 125, 255, 0.3); padding-bottom: 30px; margin-bottom: 50px; }
+        .title-group h1 { color: #fff; font-size: 32px; line-height: 1.4; margin-bottom: 15px; }
+        .title-meta { font-family: monospace; color: #887dff; font-size: 14px; background: rgba(136, 125, 255, 0.1); display: inline-block; padding: 6px 16px; border-radius: 6px; }
+
+        .whitepaper-content h2 { color: #887dff; font-size: 24px; margin-top: 60px; margin-bottom: 20px; }
+        .whitepaper-content h3 { color: #fff; font-size: 18px; margin-top: 40px; margin-bottom: 15px; border-left: 3px solid #887dff; padding-left: 12px; }
+        .whitepaper-content p { margin-bottom: 20px; text-align: justify; }
+
+        .highlight-text { color: #fff; font-weight: 600; background: rgba(136, 125, 255, 0.15); padding: 2px 6px; border-radius: 4px; }
+
+        /* 计时器级联模块设计 (凸显硬核逻辑) */
+        .timer-cascade { margin: 30px 0; display: flex; flex-direction: column; gap: 15px; }
+        .timer-item { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; position: relative; }
+        .timer-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 10px 0 0 10px; }
+        .timer-1::before { background: #ff4757; }
+        .timer-2::before { background: #2ed573; }
+        .timer-3::before { background: #1e90ff; }
+        .timer-item strong { display: block; color: #fff; margin-bottom: 8px; font-size: 15px; }
+        
+        /* 编码范式 2x2 网格设计 */
+        .paradigm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
+        .paradigm-card { background: rgba(136, 125, 255, 0.05); border: 1px solid rgba(136, 125, 255, 0.2); padding: 25px; border-radius: 12px; }
+        .paradigm-card h4 { color: #887dff; margin-top: 0; margin-bottom: 15px; font-size: 16px; }
+        .paradigm-card .mechanic { margin-bottom: 12px; font-size: 14px; line-height: 1.6; }
+        .paradigm-card .mechanic span { color: #fff; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ==================== 移动端适配 ==================== */
+        @media (max-width: 900px) {
+            .whitepaper-container { padding: 40px 15px; }
+            .whitepaper-content { padding: 30px 20px; }
+            .title-group h1 { font-size: 24px; }
+            .whitepaper-content h2 { font-size: 20px; margin-top: 40px; }
+            .whitepaper-content h3 { font-size: 16px; margin-top: 30px; }
+            .whitepaper-content p { font-size: 14px; }
+            .paradigm-grid { grid-template-columns: 1fr; /* 手机端强制单列 */ gap: 15px; }
+            .timer-item { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="whitepaper-container">
+<article class="whitepaper-content">
+
+    <div class="title-group">
+        <h1>物理层隐式通信架构白皮书：<br>极端环境下的零网络指令传输体系</h1>
+        <div class="title-meta">技术归属：Chuanis 物理层安全协议生态 (Protected by Patent CN 122225590 A)</div>
+    </div>
+
+    <p><strong>核心议题：</strong>在无专用通信信道、无高频载波的物理受限环境下，如何利用纯物理特征变化实现跨系统的确定性指令传输与状态同步。</p>
+
+    <h2>01. 行业背景与技术挑战</h2>
+    <p>在现代工业与极端环境应用（如深水流体环境、强电磁干扰区域、易燃易爆气体环境）中，设备间的通信面临着严苛的物理限制。传统的通信协议（如 I2C, CAN总线, 射频或电力线载波通信）通常存在以下局限性：</p>
+    <p><span class="highlight-text">介质依赖与安全隐患：</span>依赖高频信号调制，在复杂介质中衰减严重；且在易爆环境中，高频或复杂的电气变化容易引发安全风险。</p>
+    <p><span class="highlight-text">硬件开销与脆弱性：</span>需要高精度的模数转换器（ADC）、时钟同步机制以及专用的通信线缆，增加了触点暴露风险和系统的脆弱性。</p>
+    
+    <p><strong>本架构的解决路径：</strong><br>
+    本方案提出了一种无需通信线缆、无需高频载波的“隐式通信”架构。系统通过复用现有的基础物理连接（如供电触点或物理感应面），将信息直接编码于宏观物理状态（如通断、电压斜率、参数偏移）的变化中，从而在第一系统（主控）与第二系统（受控）之间建立一条高鲁棒性的单向指令通道。</p>
+
+    <h2>02. 理论重构：无需时钟同步的“信号周期”</h2>
+    <p>根据信息论原理，任何信息的传递均依赖于可识别的状态边界。在缺乏专用时钟线（Clock）的条件下，本架构通过重新定义“信号周期”来确立信息帧的边界。</p>
+
+    <h3>2.1 周期的物理锚点</h3>
+    <p><strong>信号开始（T=0）：</strong>定义为物理特征的感应值首次脱离预设的“初始稳定状态范围”的时刻。此节点作为后续所有计时与判断操作的时间基准。</p>
+    <p><strong>信号结束：</strong>定义为物理特征进入并持续保持在“最终静默状态”（如理论零值状态/彻底断电）达到一定的确认时长。以“绝对的物理消失”作为事件终结的锚点，可有效消除环境干扰带来的歧义。</p>
+
+    <h3>2.2 级联计时器协同机制（防抖与状态确认）</h3>
+    <p>为确保信号周期的精确捕获，系统在接收端引入了双计时器协同机制，以客观参数（示例）说明其工作流：</p>
+    
+    <div class="timer-cascade">
+        <div class="timer-item timer-1">
+            <strong>硬件超时计时器（如 100ms）</strong>
+            当感应到信号物理消失时立即启动。计时结束后，底层硬件停止数据采集，生成“终止确认事件”。
+        </div>
+        <div class="timer-item timer-2">
+            <strong>逻辑确认计时器（如 110ms）</strong>
+            在检测到数据流中断时同步启动。由于其时长大于硬件超时，控制单元能在其生命周期内从容接收“终止确认事件”，从而得出确定的逻辑裁决，宣告信号周期结束。
+        </div>
+        <div class="timer-item timer-3">
+            <strong>复位延时（如 25ms）</strong>
+            确认结束后，硬件延时复位，确保决策窗口无干扰。
+        </div>
+    </div>
+
+    <h2>03. 物理层隐式编码与解码范式</h2>
+    <p>在上述定义的单一信号周期内，第一系统通过改变物理输出特征进行编码，第二系统采集特征参数并通过“指令库映射”进行解码。本架构支持以下四种主要的物理编码范式：</p>
+
+    <div class="paradigm-grid">
+        <div class="paradigm-card">
+            <h4>范式一：离散事件计数编码（脉冲序列）</h4>
+            <div class="mechanic"><span>编码原理：</span>第一系统通过控制物理开关单元，输出特定的“消失-出现-消失”序列。</div>
+            <div class="mechanic"><span>解码机制：</span>第二系统不进行复杂的波形匹配，而是将每次通过阈值验证的有效信号“出现”视为独立的离散事件。通过累加周期内的事件总数（如：1次代表流程A，2次代表流程B），与预设的指令库进行数值匹配。</div>
+        </div>
+        <div class="paradigm-card">
+            <h4>范式二：物理衰减斜率编码（姿态编码）</h4>
+            <div class="mechanic"><span>编码原理：</span>第一系统在切断信号时，控制其关断的速度（例如：缓慢的软关断 vs. 瞬间的硬切断）。</div>
+            <div class="mechanic"><span>解码机制：</span>第二系统采集信号从初始状态衰减至零所需的“时间值”。例如，衰减耗时 50ms 落入[40ms, 60ms]的阈值区间，解码为指令 A；耗时 5ms 落入[1ms, 10ms]的阈值区间，解码为指令 B。</div>
+        </div>
+        <div class="paradigm-card">
+            <h4>范式三：电气参数偏移编码（阶跃特征）</h4>
+            <div class="mechanic"><span>编码原理：</span>在信号彻底消失前，第一系统主动将信号的特定电学参数（如电压/电流）偏移至另一稳定值并维持。</div>
+            <div class="mechanic"><span>解码机制：</span>第二系统提取变化后的“新物理特征值”（如稳定在 9V 或 6V），将其作为解码参数与指令库进行精准比对。</div>
+        </div>
+        <div class="paradigm-card">
+            <h4>范式四：存在时长窗口编码（生命周期）</h4>
+            <div class="mechanic"><span>编码原理：</span>第一系统控制单次信号“出现”的持续物理时间。</div>
+            <div class="mechanic"><span>解码机制：</span>第二系统计量该信号存在的“时间值”（如 20ms 或 10ms），通过匹配预设的时间窗口阈值，解析出对应的隐式指令。</div>
+        </div>
+    </div>
+
+    <h2>04. 架构逻辑与系统级优势</h2>
+    <p>本架构在解码效率、系统解耦与控制严谨性上，展现出有别于传统通信协议的系统级特征：</p>
+
+    <h3>4.1 唯一授权性与主从边界界定</h3>
+    <p>本通信方法明确划分了系统的控制边界。对于关键受控动作（如安全隔离、状态重置），第二系统的执行依据仅来源于第一系统下发的隐式指令。即使第二系统在本地监测到某些条件已达成，在未收到确定性指令前，亦不会自行触发动作。这从根本上确立了主控系统的全局调度地位。</p>
+
+    <h3>4.2 动作即解码（即时控制机制）</h3>
+    <p>隐式指令本身不承载复杂的“状态数据包”，它仅作为触发本地指令库模板的“钥匙”。<br>
+    <span class="highlight-text">因果闭环：</span>解码成功的瞬间，即为动作执行的精确时间点。<br>
+    <span class="highlight-text">高保真执行：</span>系统无需握手（Handshake）或重传确认机制。由于信息指令库预置了流程的全部对应关系，第二系统能够在无时钟同步的条件下，对主控指令做出无歧义的即时响应。</p>
+
+    <h3>4.3 高度普适的应用前景</h3>
+    <p>该技术方案提供了一种低成本、高鲁棒性的跨系统交互设计哲学，适用于：<br>
+    • <strong>模块化电子设备：</strong>主机与可插拔组件间的盲插识别与状态同步。<br>
+    • <strong>工业控制与恶劣环境：</strong>为对连接可靠性要求极高的现场传感器、执行器提供底层安全隔离与控制。<br>
+    • <strong>安全认证与生命周期管理：</strong>为耗材、授权配件提供极简的物理层鉴别通道。</p>
+
+</article>
+</main>
+
+<script src="../assets/background.js"></script>
+<script src="../assets/nav.js"></script>
+</body>
+</html>
