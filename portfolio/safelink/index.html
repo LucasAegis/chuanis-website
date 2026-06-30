@@ -2,9 +2,11 @@
 <html lang="zh-CN"> 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SafeLink Protocol 说明书及权利要求 | CHUANIS 专利库</title>
     <meta name="description" content="一种安全序列化电连接系统及方法 (Patent CN 122225590 A)。提供详细的专利说明书、权利要求、摘要及附图，并支持官方原始文件下载。">
+    
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     
     <link rel="stylesheet" href="../../assets/background.css">
     <link rel="stylesheet" href="../../assets/nav.css">
@@ -48,13 +50,63 @@
         .sidebar-nav a:hover, .sidebar-nav a.active { color: #887dff; border-color: #887dff; padding-left: 10px; }
         
         /* 右侧内容区排版 */
-        .content-area { flex-grow: 1; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 20px; min-height: 60vh; backdrop-filter: blur(10px); color: #e2e2e2; line-height: 1.8; font-size: 16px; }
+        .content-area { flex-grow: 1; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 20px; min-height: 60vh; backdrop-filter: blur(10px); color: #e2e2e2; line-height: 1.8; font-size: 16px; box-sizing: border-box; overflow-x: hidden; }
         .content-area h1 { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 30px; }
         .content-area h2 { color: #887dff; margin-top: 40px; margin-bottom: 15px; }
-        .content-area p { margin-bottom: 20px; text-align: justify; }
+        .content-area p { margin-bottom: 20px; text-align: justify; word-wrap: break-word; }
         
         /* 附图专属样式：让图片响应式居中，带高级阴影 */
         .content-area img { max-width: 100%; height: auto; border-radius: 12px; margin-bottom: 40px; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* ==================== 移动端专属适配 ==================== */
+        @media (max-width: 900px) {
+            .layout-container {
+                flex-direction: column; /* 强制改为上下结构 */
+                gap: 20px;
+                padding: 20px 15px;
+            }
+            .sidebar {
+                width: 100%; /* 释放侧边栏宽度 */
+                position: relative;
+                top: 0;
+            }
+            .patent-meta {
+                text-align: center; /* 手机端头部信息居中更美观 */
+                margin-bottom: 20px;
+            }
+            .sidebar-divider { margin-top: 15px; margin-bottom: 15px; }
+            
+            /* 导航菜单改为横向可滑动架构 */
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 12px;
+                padding-bottom: 5px;
+            }
+            .sidebar-nav a {
+                border-bottom: none;
+                padding: 8px 16px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 8px;
+                font-size: 15px;
+                white-space: nowrap; /* 强制文字不换行 */
+            }
+            .sidebar-nav a:hover, .sidebar-nav a.active {
+                padding-left: 16px; /* 取消手机端的悬停左移效果，防止闪烁 */
+                background: rgba(136, 125, 255, 0.2);
+            }
+            
+            /* 彻底释放内容区空间 */
+            .content-area {
+                width: 100%;
+                padding: 25px 20px; /* 大幅缩小内边距 */
+                font-size: 15px;
+            }
+            .content-area h1 { font-size: 22px; }
+            .content-area h2 { font-size: 18px; margin-top: 30px; }
+            .content-area img { margin-bottom: 25px; }
+        }
     </style>
 </head>
 <body>
@@ -104,17 +156,14 @@
                 const page = this.getAttribute('href');
                 
                 if (isImages) {
-                    // 如果点击的是“附图”，直接注入图片代码，不走 Markdown 解析
                     document.getElementById('content-box').innerHTML = `
                         <h1>附图</h1>
                         <img src="通信禁区系统架构图1.png" alt="通信禁区系统架构图1">
                         <img src="通信禁区系统架构图2.png" alt="通信禁区系统架构图2">
                     `;
-                    // 更新高亮状态
                     document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
                     this.classList.add('active');
                 } else {
-                    // 如果点击的是 MD 文档，走正常加载逻辑
                     loadContent(page, this);
                 }
             });
