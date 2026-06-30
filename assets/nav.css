@@ -71,3 +71,33 @@
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
 }
+
+/* ==================== 移动端适配 ==================== */
+@media (max-width: 900px) {
+    .global-navbar {
+        padding: 15px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    /* 导航中心允许横向滑动，防止拥挤 */
+    .nav-center {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+    
+    .nav-center a {
+        white-space: nowrap; /* 强制不换行 */
+        font-size: 13px;
+    }
+
+    .nav-right {
+        width: 100%;
+        justify-content: center;
+    }
+}
