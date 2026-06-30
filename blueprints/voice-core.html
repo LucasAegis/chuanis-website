@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Voice Core 端侧离线语音引擎白皮书 | CHUANIS BLUEPRINTS</title>
+    <title>Voice Core 端侧全离线连续语音引擎白皮书 | CHUANIS BLUEPRINTS</title>
     <meta name="description" content="攻克端侧语音识别的内存溢出与高延迟瓶颈。独创异步双轨并发与流式UI动态替换架构，已实现Android/HarmonyOS量产。">
     
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
         .whitepaper-content { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 60px 80px; border-radius: 20px; max-width: 900px; width: 100%; backdrop-filter: blur(15px); color: #d2d0dd; line-height: 1.8; font-size: 16px; box-sizing: border-box; }
         
         .title-group { text-align: center; border-bottom: 1px solid rgba(136, 125, 255, 0.3); padding-bottom: 30px; margin-bottom: 50px; }
-        .title-group h1 { color: #fff; font-size: 32px; line-height: 1.4; margin-bottom: 15px; }
+        .title-group h1 { color: #fff; font-size: 34px; line-height: 1.4; margin-bottom: 15px; }
         .title-meta { font-family: monospace; color: #887dff; font-size: 14px; background: rgba(136, 125, 255, 0.1); display: inline-block; padding: 6px 16px; border-radius: 6px; }
 
         .whitepaper-content h2 { color: #887dff; font-size: 24px; margin-top: 60px; margin-bottom: 20px; }
@@ -24,31 +24,45 @@
 
         .highlight-text { color: #fff; font-weight: 600; background: rgba(136, 125, 255, 0.15); padding: 2px 6px; border-radius: 4px; }
 
-        /* GitHub 徽章样式 */
+        /* 量产双端 App 垂直堆叠展示 */
+        .app-stack { display: flex; flex-direction: column; gap: 50px; margin-top: 40px; }
+        .app-card { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; text-align: center; position: relative; overflow: hidden; }
+        
+        /* 语言限制专属标签 */
+        .lang-badge { position: absolute; top: 0; right: 0; background: rgba(136, 125, 255, 0.2); color: #887dff; padding: 8px 16px; font-size: 13px; font-weight: 700; border-bottom-left-radius: 12px; letter-spacing: 1px; }
+        .lang-badge.zh { background: rgba(255, 71, 87, 0.15); color: #ff4757; }
+        
+        .app-card h4 { color: #fff; margin-top: 0; margin-bottom: 10px; font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+        .app-card .app-desc { color: #aaa; font-size: 15px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .app-card img { width: 100%; max-width: 650px; height: auto; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.08); }
+        .store-btn { display: inline-block; padding: 12px 30px; background: rgba(136, 125, 255, 0.15); border: 1px solid #887dff; color: #887dff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600; letter-spacing: 1px; transition: all 0.3s; }
+        .store-btn:hover { background: #887dff; color: #fff; box-shadow: 0 0 20px rgba(136, 125, 255, 0.4); }
+
+        /* GitHub 开源使命区域 */
+        .mission-box { background: rgba(136, 125, 255, 0.03); border: 1px dashed rgba(136, 125, 255, 0.4); padding: 30px; border-radius: 16px; margin-top: 40px; }
+        .mission-box h4 { color: #fff; margin-top: 0; margin-bottom: 15px; font-size: 20px; }
+        
         .github-badge {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff; text-decoration: none; padding: 15px 30px; border-radius: 12px;
-            font-family: monospace; font-size: 16px; font-weight: 600; margin: 30px 0;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: #fff; color: #000; text-decoration: none; padding: 12px 24px; border-radius: 8px;
+            font-family: monospace; font-size: 15px; font-weight: 700; margin-top: 15px; margin-bottom: 30px;
             transition: all 0.3s ease;
         }
-        .github-badge:hover { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.4); }
-        .github-badge svg { width: 24px; height: 24px; fill: currentColor; }
+        .github-badge:hover { background: #d2d0dd; transform: translateY(-2px); }
+        .github-badge svg { width: 20px; height: 20px; fill: currentColor; }
 
-        /* 量产双端 App 展示网格 */
-        .app-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
-        .app-card { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; text-align: center; }
-        .app-card img { width: 100%; max-width: 250px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .app-card h4 { color: #fff; margin-top: 0; margin-bottom: 15px; font-size: 18px; letter-spacing: 1px; }
-        .store-btn { display: inline-block; padding: 10px 20px; background: rgba(136, 125, 255, 0.15); border: 1px solid #887dff; color: #887dff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
-        .store-btn:hover { background: #887dff; color: #fff; }
+        /* 授权声明 */
+        .license-note { border-left: 4px solid #887dff; padding-left: 15px; font-size: 14px; color: #aaa; line-height: 1.6; }
+        .license-note strong { color: #d2d0dd; }
 
         @media (max-width: 900px) {
             .whitepaper-container { padding: 40px 15px; }
             .whitepaper-content { padding: 30px 20px; }
-            .title-group h1 { font-size: 24px; }
+            .title-group h1 { font-size: 26px; }
             .whitepaper-content h2 { font-size: 20px; margin-top: 40px; }
-            .app-showcase { grid-template-columns: 1fr; gap: 20px; }
+            .app-card { padding: 30px 15px; }
+            .app-card h4 { font-size: 22px; }
+            .lang-badge { font-size: 11px; padding: 6px 12px; }
         }
     </style>
 </head>
@@ -62,56 +76,70 @@
         <div class="title-meta">架构保护：Patent CN 122201305 A</div>
     </div>
 
-    <h2>01. 行业困局：端侧算力的“不可能三角”</h2>
+    <h2>01. 行业困局：端侧算力的“物理魔咒”</h2>
     <p>在政务、军工、商业机密及高端个人隐私场景中，<strong>“语音数据出境（上传云端）”是绝对的安全红线。</strong>然而，当我们将语音大模型强制部署在纯本地边缘设备（如智能手机、录音笔）时，行业普遍面临着难以逾越的物理瓶颈：</p>
     <p><span class="highlight-text">困境一：长语音导致的 OOM（内存溢出）必崩魔咒。</span>连续输入超长语音会导致端侧声学特征矩阵无限膨胀，常规手机在识别 2~5 分钟后必定发生内存溢出，引发进程强杀或死机。</p>
-    <p><span class="highlight-text">困境二：速度与精度的物理互斥。</span>要实现实时上屏（低延迟），只能使用轻量级残缺模型，识别极差；要实现高精度纠错，必须调用重度神经网络，但推理耗时巨大，导致屏幕长期无视觉反馈，体验断裂。</p>
+    <p><span class="highlight-text">困境二：速度与精度的物理互斥。</span>要实现实时上屏（低延迟），只能使用轻量级残缺模型，识别极差；要实现高精度纠错，必须调用重度大模型，但推理耗时巨大，导致屏幕长期无视觉反馈，体验断裂。</p>
 
     <h2>02. Voice Core 降维架构：重构端侧交互调度</h2>
     <p>本系统摒弃了传统的单线程识别路径，独创性地提出了<strong>“异步双轨并发 + 底层动态 UI 替换”</strong>架构，在纯本地零网络状态下，完美实现了“无限时长、极速上屏、极高精度”的共存。</p>
 
-    <h3>架构核武 1：动态防崩切片与“接力式”内存销毁</h3>
-    <p>系统通过“VAD 语义停顿软切分”与“算力保护硬切分”双重阈值，将无限音频流动态切割。更为核心的是，采用<strong>“交替接力内存释放策略”</strong>：前一切片的超大推理缓存，必须等待后一切片定稿上屏后方可彻底销毁。这一机制将极度耗费 RAM 的空间复杂度强行降维至常数级开销，<strong>确保设备连续离线录音数小时，内存水位线依然恒定如初。</strong></p>
+    <h3>架构核武 1：动态切片与“接力式”内存销毁</h3>
+    <p>系统通过“VAD 语义停顿软切分”与“算力保护硬切分”双重阈值，将无限音频流动态切割。更为核心的是，采用交替接力内存释放策略：前一切片的超大推理缓存，必须等待后一切片定稿上屏后方可彻底销毁。这一机制将极度耗费 RAM 的空间复杂度强行降维至常数级开销，<strong>确保设备连续离线录音数小时（最高实测 500 分钟），内存水位线依然恒定如初。</strong></p>
 
     <h3>架构核武 2：异步双轨异构调度（CPU 掩护，NPU 狙击）</h3>
     <p>架构同时向底层硬件并发两套管道：<br>
-    <strong>快轨（流式先锋）：</strong>调度 CPU 运行微型声学模型，以毫秒级延迟向屏幕输出“临时草稿”，彻底消灭用户的视觉等待焦虑。<br>
-    <strong>慢轨（重火力后处理）：</strong>将高算力 NPU 深度绑定至端侧 Whisper 等大模型，在后台执行深层语义推理与上下文纠错。由于算力解耦，芯片发热量大幅下降，且双轨互不挂起。</p>
+    <strong>快轨（流式先锋）：</strong>调度 CPU 运行微型声学模型，以毫秒级延迟向屏幕输出“临时草稿”，彻底消灭视觉等待焦虑。<br>
+    <strong>慢轨（重火力后处理）：</strong>将高算力 NPU 深度绑定至端侧大模型，在后台执行深层推理。算力解耦不仅大幅降低芯片发热，还孕育出了极具弹性的“算力仪表盘（Compute Dashboard）”：在旗舰机（如骁龙 8Gen3）上实现零延迟实时上屏；而在中低端老旧机型上，系统允许任务在后台列队积压但绝不崩溃（Never Crash），硬件配置只决定处理速度，不决定生死。</p>
 
-    <h3>架构核武 3：基于全局时间戳的底层 UI 无感平滑替换</h3>
-    <p>面对快慢双轨的物理时间差，系统在切分音频的瞬间为其打上“全局唯一时间戳”。当慢轨（NPU）数秒后完成高精度推理定稿时，底层替换引擎携带该时间戳，精准检索此前“快轨临时草稿”在显示屏幕上的坐标区间。<strong>随后调用底层 API（如差异 Diff 退格算法），将旧字静默抹除并覆写新字。</strong>利用人眼阅读的时间差，完成了一场华丽的视觉魔术。</p>
+    <h3>架构核武 3：全局时间戳与底层 UI 无感平滑替换</h3>
+    <p>面对快慢双轨的物理时间差，系统在切分音频的瞬间为其打上“全局唯一时间戳”。当慢轨数秒后完成高精度定稿时，底层替换引擎携带该时间戳，精准检索此前“快轨临时草稿”在显示屏幕上的坐标区间。<strong>随后调用底层交互 API，将旧草稿静默抹除并覆写新字。</strong>利用人眼阅读的时间差，完成了一场华丽的视觉魔术。</p>
 
-    <h3>架构核武 4：FuzzyMatch 边界缝合与多级词库瀑布流</h3>
-    <p>物理硬切分会导致前后切片出现“重叠回音”。系统在 CPU 内存中执行相邻切片首尾的 FuzzyMatch 去重算法。同时，引入“白名单 OOV 异常打标 → 用户热词无视权重强覆盖 → 领域词库定向兜底”的瀑布式后处理，彻底解决了端侧量化模型生僻词识别率下降的痛点。</p>
+    <h3>架构核武 4：百万级词库矩阵与瀑布流干预</h3>
+    <p>为了达到极致的精准度，我们在底层嵌入了超 100 万词汇的本地基础巨型词典（涵盖通用、科技、法律、商业四大专属领域）。系统在 CPU 内存中执行相邻切片的 FuzzyMatch 去重算法，并辅以“白名单异常打标 → 用户热词强覆盖 → 领域词库定向兜底”的瀑布式干预，彻底压榨出端侧量化模型的极限精度。</p>
 
-    <h2>03. 从理论到量产：双端商业化部署验证 (Show, Don't Tell)</h2>
-    <p>本架构并非停留在纸面的学术概念。目前，CHUANIS 实验室已基于此专利协议，完成了主流移动操作系统的原生级别编译与应用商店上架。在真实商用机型的极限压测中，实现长达数小时的高频转写且零 OOM 事故。</p>
+    <h2>03. 商业量产验证：双端 OS 级原生部署 (Show, Don't Tell)</h2>
+    <p>优秀的架构不应只停留在纸面。CHUANIS 实验室已基于此专利协议，完成了主流移动操作系统（Android / HarmonyOS）的原生级别编译与应用商店上架，并在真实商用机型压测中通过了极其严苛的工程级验证。</p>
 
-    <div class="app-showcase">
+    <div class="app-stack">
         <div class="app-card">
-            <h4>Android 量产端 (Google Play)</h4>
+            <div class="lang-badge">ENGLISH ONLY</div>
+            <h4>Aegis Offline AI Keyboard</h4>
+            <p class="app-desc">
+                发布于 Google Play 的硬核旗舰版本（定价 $299 USD）。专为极客与专业级英文办公场景打造。搭载百万级本地英文词库矩阵，提供毫无妥协的纯英文离线高精度转写体验。
+            </p>
             <img src="02.png" alt="Android Offline Voice App">
             <br>
             <a href="https://play.google.com/store/apps/details?id=com.aegis.voice" target="_blank" class="store-btn">GET IT ON GOOGLE PLAY</a>
         </div>
+
         <div class="app-card">
-            <h4>HarmonyOS 原生端 (AppGallery)</h4>
+            <div class="lang-badge zh">仅支持中文语境</div>
+            <h4>繁星不语输入法</h4>
+            <p class="app-desc">
+                发布于华为应用市场（AppGallery）的原生鸿蒙应用。深度适配中文语境特征，针对中文极简音节进行特定的 OOV 热词调优，为政企会议与个人记录提供绝对断网的中文智脑引擎。
+            </p>
             <img src="01.png" alt="HarmonyOS Offline Voice App">
             <br>
             <a href="https://appgallery.huawei.com/app/detail?id=com.fanxing.voice&channelId=SHARE&source=appshare" target="_blank" class="store-btn">EXPLORE IN APPGALLERY</a>
         </div>
     </div>
 
-    <h2>04. 开源生态与商业授权许可</h2>
-    <p>我们坚信架构的力量，更相信极致透明带来的信任。为供业界同行进行性能审查与底层安全验证，Voice Core 的核心 Android 工程调度代码已向全球开发者开源。</p>
+    <div class="mission-box">
+        <h4>04. The Open Source Mission（开源与授权许可）</h4>
+        <p>我们深知，伟大的架构需要接受极客的审视，技术的繁荣更离不开透明与开源。</p>
+        <p>因此，我们将 Voice Core 的底层工程调度源码（Titan V13 Core）基于 <strong>MIT 协议</strong>向全球开发者开源。独立开发者可零成本克隆、探究其底层的双轨解密与调度机制。如果您认为编译环境过于繁琐，也欢迎前往应用商店下载开箱即用的量产版本，以支持我们的独立研发。</p>
 
-    <a href="https://github.com/chuanis/offline-voice-android" target="_blank" class="github-badge">
-        <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        VIEW SOURCE ON GITHUB
-    </a>
+        <a href="https://github.com/chuanis/offline-voice-android" target="_blank" class="github-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            VIEW SOURCE ON GITHUB
+        </a>
 
-    <p><strong>商业应用警告：</strong><br>
-    商业级全量部署、深度 OS 级内核集成（涉及快慢双轨调度与 UI 底层替换），受专利 <strong>CN 122201305 A</strong> 严格保护。未经官方许可的商业性封装与变现视为侵权。请联系实验室（Contact 页面）获取合法的商业授权，构建您的极简安全壁垒。</p>
+        <div class="license-note">
+            <strong>企业级商业授权提示：</strong><br>
+            对于期望将该架构深度集成至操作系统（OS）底层，或运用其双轨调度机制进行规模化商业封装与变现的硬件巨头及企业客户，本核心架构受专利 <strong>CN 122201305 A</strong> 严格保护。欢迎通过 Contact 页面联系实验室获取合规的商业级部署授权，构筑您的全离线隐私安全壁垒。
+        </div>
+    </div>
 
 </article>
 </main>
