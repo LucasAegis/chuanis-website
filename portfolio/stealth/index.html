@@ -1,43 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN"> 
 <head>
     <meta charset="UTF-8">
-    <title>SafeLink Protocol | CHUANIS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stealth-Comm 隐藏式物理通信架构 | CHUANIS 专利库</title>
+    <meta name="description" content="基于母案 CN122225590A 的物理层隐藏式通信协议 (Stealth-Comm) 分案集群。提供零网络依赖下的异步信息交互与解码验证。">
+    
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    
     <link rel="stylesheet" href="../../assets/background.css">
     <link rel="stylesheet" href="../../assets/nav.css">
+    
     <style>
-        .layout-container { display: flex; max-width: 1200px; margin: 40px auto; gap: 60px; padding: 0 20px; }
-        .sidebar { width: 200px; flex-shrink: 0; }
-        .sidebar a { display: block; color: #d2d0dd; text-decoration: none; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .sidebar a:hover, .sidebar a.active { color: #887dff; border-color: #887dff; }
-        .content-area { flex-grow: 1; background: rgba(255,255,255,0.03); padding: 40px; border-radius: 20px; min-height: 60vh; backdrop-filter: blur(10px); }
+        .layout-container { display: flex; max-width: 1200px; margin: 40px auto; gap: 60px; padding: 0 20px; align-items: flex-start; }
+        
+        .sidebar { width: 320px; flex-shrink: 0; position: sticky; top: 120px; } 
+        
+        /* 专利抬头与母案说明 */
+        .patent-meta { margin-bottom: 30px; }
+        .patent-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+        .patent-id { font-size: 15px; font-weight: 600; color: #887dff; font-family: monospace; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .patent-source { font-size: 12px; color: #aaa; margin-bottom: 20px; line-height: 1.5; padding: 10px; background: rgba(255,255,255,0.05); border-left: 3px solid #887dff; border-radius: 0 8px 8px 0; }
+        
+        /* 官方文件下载按钮样式 */
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(136, 125, 255, 0.1);
+            border: 1px solid rgba(136, 125, 255, 0.5);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover { background: rgba(136, 125, 255, 0.3); border-color: #887dff; box-shadow: 0 0 15px rgba(136, 125, 255, 0.4); }
+
+        .sidebar-divider { border: 0; height: 1px; background: rgba(255, 255, 255, 0.1); margin-bottom: 15px; margin-top: 25px; }
+        
+        /* 左侧菜单：分案列表 */
+        .sidebar-nav a { display: block; color: #d2d0dd; text-decoration: none; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.3s; font-size: 16px; font-weight: 500; line-height: 1.4; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { color: #887dff; border-color: #887dff; padding-left: 10px; }
+        
+        /* 右侧内容区排版 */
+        .content-area { flex-grow: 1; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 20px; min-height: 60vh; backdrop-filter: blur(10px); color: #e2e2e2; line-height: 1.8; font-size: 15px; box-sizing: border-box; overflow-x: hidden; }
+        .content-area h1 { color: #fff; font-size: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 30px; line-height: 1.4; }
+        .content-area p { margin-bottom: 15px; text-align: justify; word-wrap: break-word; }
+        .content-area strong { color: #887dff; font-weight: 600; }
+
+        /* 移动端专属适配 */
+        @media (max-width: 900px) {
+            .layout-container { flex-direction: column; gap: 20px; padding: 20px 15px; }
+            .sidebar { width: 100%; position: relative; top: 0; }
+            .patent-meta { text-align: left; margin-bottom: 20px; }
+            .sidebar-divider { margin-top: 15px; margin-bottom: 15px; }
+            
+            .sidebar-nav { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 12px; padding-bottom: 10px; }
+            .sidebar-nav a { border-bottom: none; padding: 10px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 14px; white-space: nowrap; }
+            .sidebar-nav a:hover, .sidebar-nav a.active { padding-left: 16px; background: rgba(136, 125, 255, 0.2); }
+            
+            .content-area { width: 100%; padding: 25px 20px; font-size: 14px; }
+            .content-area h1 { font-size: 20px; }
+        }
     </style>
 </head>
 <body>
     <main class="layout-container">
         <aside class="sidebar">
-            <a href="#" class="active" onclick="loadContent('specification.html', this)">说明书</a>
-            <a href="#" onclick="loadContent('claims.html', this)">权利要求</a>
-            <a href="#" onclick="loadContent('abstract.html', this)">摘要</a>
-            <a href="#" onclick="loadContent('figures.html', this)">幅图</a>
+            <div class="patent-meta">
+                <div class="patent-name">Stealth-Comm 隐藏式异步通信架构</div>
+                <div class="patent-id">Divisional Patent Cluster</div>
+                <div class="patent-source">
+                    本架构包含的 4 项方法均为核心母案 <strong>CN 122225590 A</strong> 的分案衍生。构成完整的物理层闭环通信协议。
+                </div>
+                <a href="../safelink/一种安全序列化电连接系统及方法.pdf" download class="download-btn">📥 下载母案原始文献 (PDF)</a>
+            </div>
+            
+            <hr class="sidebar-divider">
+            
+            <nav class="sidebar-nav">
+                <a href="#" data-key="boundary" class="active">信号结束边界的判定方法</a>
+                <a href="#" data-key="receive">信号接收方法</a>
+                <a href="#" data-key="interaction">异步信息交互方法</a>
+                <a href="#" data-key="decode">信息解码方法</a>
+            </nav>
         </aside>
-        <section class="content-area" id="content-box">
-            <!-- 默认加载内容 -->
-        </section>
+
+        <article class="content-area" id="content-box">
+            </article>
     </main>
 
     <script src="../../assets/background.js"></script>
     <script src="../../assets/nav.js"></script>
+    
     <script>
-        function loadContent(page, element) {
-            fetch(page).then(res => res.text()).then(html => {
-                document.getElementById('content-box').innerHTML = html;
+        // 核心突破：摒弃 MD，直接将权利要求文本作为前端对象数据存储
+        const claimsData = {
+            "boundary": `
+                <h1>一种信号结束边界的判定方法</h1>
+                <p>&emsp;&emsp;<strong>1. 一种信号结束边界的判定方法</strong>，应用于一包含底层硬件采集单元与逻辑控制单元的电子系统，其特征在于，所述判定方法包括以下步骤：</p>
+                <p>&emsp;&emsp;a. 双轨计时启动：当所述底层硬件采集单元持续监测的外部物理特征进入一预设的静默状态范围时，所述底层硬件采集单元启动一内部的硬件超时计时，且所述逻辑控制单元同步启动一独立的最终确认计时；</p>
+                <p>&emsp;&emsp;b. 硬件停工事件生成：当所述外部物理特征持续维持在所述静默状态范围内，且所述硬件超时计时达到一预设硬件超时时长时，所述底层硬件采集单元停止采集动作，以在所述电子系统内部生成一硬件停工事件；</p>
+                <p>&emsp;&emsp;c. 逻辑最终裁决：所述逻辑控制单元在捕获到所述硬件停工事件，且自身所述独立的最终确认计时达到一预设最终确认时长后，执行对所述信号结束边界的最终界定。</p>
+                <p>&emsp;&emsp;<strong>2. 根据权利要求1所述的判定方法</strong>，其特征在于，所述预设最终确认时长的时间值大于所述预设硬件超时时长的时间值。</p>
+                <p>&emsp;&emsp;<strong>3. 根据权利要求1所述的判定方法</strong>，其特征在于，所述判定方法还包含一计时重置机制：在所述硬件超时计时或所述独立的最终确认计时未达到相应时长之前，若所述外部物理特征脱离所述静默状态范围，所述底层硬件采集单元与所述逻辑控制单元立刻终止并清零当前的计时动作，并恢复持续监测状态；仅当所述外部物理特征再次进入所述静默状态范围时，重新从零启动所述硬件超时计时与所述独立的最终确认计时。</p>
+                <p>&emsp;&emsp;<strong>4. 根据权利要求1所述的判定方法</strong>，其特征在于，所述底层硬件采集单元在产生所述硬件停工事件后，执行一自动复位延时计时；当所述自动复位延时计时达到一复位时长后，所述底层硬件采集单元自动恢复至初始的监测状态；其中，所述复位时长的时间值大于所述预设最终确认时长的时间值与所述预设硬件超时时长的时间值之差，以使得所述底层硬件采集单元的恢复动作发生于所述逻辑控制单元执行完成所述最终界定之后。</p>
+                <p>&emsp;&emsp;<strong>5. 根据权利要求1所述的判定方法</strong>，其特征在于，所述预设的静默状态范围被设定为一理论零值状态；所述理论零值状态用于表征所述外部物理特征在物理上完全消失，以作为判定所述信号结束边界的绝对物理基准。</p>
+                <p>&emsp;&emsp;<strong>6. 一种信号结束边界的双轨判定系统</strong>，其特征在于，所述判定系统包括：一底层硬件采集单元，被配置为在监测到一外部物理特征进入一预设的静默状态范围时，启动一内部的硬件超时计时；并且，当所述外部物理特征持续维持在所述静默状态范围内，且所述硬件超时计时达到一预设硬件超时时长时，停止采集动作，以在所述判定系统内部生成一硬件停工事件；一逻辑控制单元，与所述底层硬件采集单元通信连接，被配置为在识别到所述外部物理特征进入所述静默状态范围时，同步启动一独立的最终确认计时；并且，在捕获到所述硬件停工事件，且自身所述独立的最终确认计时达到一预设最终确认时长后，执行对所述信号结束边界的最终界定。</p>
+            `,
+            "receive": `
+                <h1>一种应用于第二系统的信号接收方法</h1>
+                <p>&emsp;&emsp;<strong>1. 一种应用于第二系统的信号接收方法</strong>，其中，所述第二系统与一第一系统已建立物理接触以形成一物理接触界面信道；所述信号的接收由所述第二系统通过对所述信道上的物理特征进行持续监测与状态追踪来完成，并且所述接收过程发生于一个被独立界定的信号周期内；其特征在于，所述信号接收方法包括以下由所述第二系统自主执行的周期界定步骤：</p>
+                <p>&emsp;&emsp;a. 周期起始锚定：当感应到的所述物理特征的值首次穿越并脱离一预设的初始稳定状态范围时，触发时间轴上的记录，将该物理脱离时刻界定为所述信号周期的开始；</p>
+                <p>&emsp;&emsp;b. 周期终止裁决：自所述信号周期的开始之后，当感应到的所述物理特征的值进入一预设的最终静默状态范围，并持续保持在该最终静默状态范围内达到一最终确认时长时，将该持续静默达标时刻界定为所述信号周期的结束。</p>
+                <p>&emsp;&emsp;<strong>2. 根据权利要求1所述的方法</strong>，其特征在于，在所述周期起始锚定步骤中，所述预设的初始稳定状态范围是通过以下步骤确立的：所述第二系统预存有一标准合法验证区间；当所述第二系统监测到信道上的物理特征的值落入并持续保持在所述标准合法验证区间之内时，表征感应到合法的信号；随后，所述第二系统提取该持续保持的物理特征的值作为恒定读数，并将该恒定读数的数据范围定义为所述预设的初始稳定状态范围。</p>
+                <p>&emsp;&emsp;<strong>3. 根据权利要求1所述的方法</strong>，其特征在于，在所述周期终止裁决步骤中，所述信号周期结束的界定逻辑具体包括：所述第二系统在感应到所述物理特征的值进入所述最终静默状态范围后，触发一内部倒计时机制；当所述物理特征的值维持在所述最终静默状态范围内的时长达到一第一预设时长时，在所述第二系统内部生成一独立于所述物理特征的终止确认事件；所述第二系统基于对所述终止确认事件的捕获，确认达到所述最终确认时长，从而做出所述信号周期结束的最终界定。</p>
+                <p>&emsp;&emsp;<strong>4. 根据权利要求3所述的方法</strong>，其特征在于，确认达到所述最终确认时长的逻辑包括：所述第二系统具有一底层硬件采集单元和一逻辑控制单元；所述底层硬件采集单元在所述物理特征的值进入所述最终静默状态范围时启动一硬件超时计时，并在超时后停止采集动作，以此状态翻转作为所述终止确认事件的生成；所述逻辑控制单元在识别到所述物理特征的值进入所述最终静默状态范围时，同步启动一独立的最终确认计时；所述逻辑控制单元在捕获到所述终止确认事件，且自身所述独立的最终确认计时达到该最终确认时长后，执行对所述信号周期结束的最终界定。</p>
+                <p>&emsp;&emsp;<strong>5. 根据权利要求4所述的方法</strong>，其特征在于，确认达到所述最终确认时长的逻辑还包含一计时重置机制：在所述硬件超时计时或所述独立的最终确认计时未达到相应时长之前，若所述物理特征的值脱离所述最终静默状态范围，所述底层硬件采集单元与所述逻辑控制单元立刻终止并清零当前的计时动作，并恢复持续监测状态；仅当所述物理特征的值再次进入所述最终静默状态范围时，重新从零启动所述硬件超时计时与所述独立的最终确认计时。</p>
+            `,
+            "interaction": `
+                <h1>一种异步信息交互方法</h1>
+                <p>&emsp;&emsp;<strong>1. 一种异步信息交互方法</strong>，应用于一第一系统与一第二系统；所述第一系统与所述第二系统建立物理接触以形成一物理接触界面信道；其特征在于，所述交互方法包括以下步骤：</p>
+                <p>&emsp;&emsp;动作编码步骤：所述第一系统控制其内部的一开关单元执行一通断序列，以在所述物理接触界面信道上触发对应的物理特征变化；</p>
+                <p>&emsp;&emsp;轨迹获取步骤：所述第二系统持续监测所述信道上的物理特征，获取发生于一个由所述第二系统独立界定的信号周期内的完整的感应数据轨迹；</p>
+                <p>&emsp;&emsp;比对解码步骤：所述第二系统将所述完整的感应数据轨迹与所述第二系统内预存的一信息映射库进行比对，以解码出一唯一信息。</p>
+                <p>&emsp;&emsp;<strong>2. 根据权利要求1所述的交互方法</strong>，其特征在于，所述动作编码步骤中，所述第一系统的内部架构及其触发机制具体包括：所述第一系统包含所述开关单元与一信号生成单元；所述开关单元的通断序列包含至少一次导通动作与至少一次断开动作；当所述开关单元执行所述导通动作时，驱动所述信号生成单元进入工作状态，以向所述信道输出具有一特定合法特征的信号；当所述开关单元执行所述断开动作时，所述信号生成单元停止输出信号；所述特定合法特征信号的交替输出与停止，共同构成所述触发的对应的物理特征变化。</p>
+                <p>&emsp;&emsp;<strong>3. 根据权利要求1所述的交互方法</strong>，其特征在于，所述第二系统独立界定所述信号周期的逻辑具体包括：确立所述信号周期的开始：将所述第二系统感应到的所述物理特征的值首次脱离一预设的初始稳定状态范围的时刻，界定为所述信号周期的开始；确立所述信号周期的结束：自所述信号周期的开始之后，将所述第二系统感应到的所述物理特征的值进入并持续保持在一预设的最终静默状态范围内达到一最终确认时长的时刻，界定为所述信号周期的结束。</p>
+                <p>&emsp;&emsp;<strong>4. 根据权利要求3所述的交互方法</strong>，其特征在于，所述完整的感应数据轨迹的获取逻辑为：在确立的所述信号周期的开始与所述信号周期的结束之间，所述物理特征所呈现的全部变化过程，被所述第二系统界定为该信号周期内的一个完整信号对象，并以该完整信号对象构成所述获取的完整的感应数据轨迹。</p>
+                <p>&emsp;&emsp;<strong>5. 根据权利要求3所述的交互方法</strong>，其特征在于，在确立所述信号周期开始的步骤中，所述预设的初始稳定状态范围是通过以下步骤确立的：所述第二系统预存有一标准合法验证区间；当所述第二系统监测到信道上的物理特征的值落入并持续保持在所述标准合法验证区间之内时，表征感应到合法的信号；随后，所述第二系统提取该持续保持的物理特征的值作为恒定读数，并将该恒定读数的数据范围定义为所述预设的初始稳定状态范围。</p>
+            `,
+            "decode": `
+                <h1>一种信息解码方法</h1>
+                <p>&emsp;&emsp;<strong>1. 一种信息解码方法</strong>，应用于第二系统，其中，所述第二系统与一第一系统已建立物理接触以形成一物理接触界面信道；所述第二系统通过持续监测所述信道上的物理特征，感知发生于一个完整信号周期内的物理特征变化；</p>
+                <p>&emsp;&emsp;其中，所述信号周期的开始，被界定为所述物理特征的感知值首次脱离一预设的初始稳定状态范围的时刻；并且，所述信号周期的结束，被界定为所述物理特征的感知值进入并持续保持在一预设的最终静默状态范围内达到一最终确认时长；其特征在于，所述信息解码方法基于该被界定的信号周期来执行，包括以下解码步骤：</p>
+                <p>&emsp;&emsp;a. 特征提取：提取在所述信号周期的开始至结束期间，所述物理特征变化所呈现出的一目标特征参数；</p>
+                <p>&emsp;&emsp;b. 映射解码：将所述目标特征参数与所述第二系统内预存的一信息映射库进行比对，所述信息映射库包含特征阈值范围与信息的对应关系；当所述目标特征参数落入所述信息映射库中的一目标特征阈值范围时，将该信号周期内发生的物理特征变化解码为该目标特征阈值范围所对应的唯一信息。</p>
+                <p>&emsp;&emsp;<strong>2. 根据权利要求1所述的信息解码方法</strong>，其特征在于，所述预设的初始稳定状态范围是通过以下步骤确立的：所述第二系统预存有一标准合法验证区间；当所述第二系统监测到信道上的物理特征的值落入并持续保持在所述标准合法验证区间之内时，表征感应到合法的信号；随后，所述第二系统提取该持续保持的物理特征的值作为恒定读数，并将该恒定读数的数据范围定义为所述预设的初始稳定状态范围。</p>
+                <p>&emsp;&emsp;<strong>3. 根据权利要求1所述的信息解码方法</strong>，其特征在于，所述信号周期结束的界定逻辑具体包括：所述第二系统具有一底层硬件采集单元和一逻辑控制单元；当所述物理特征的感知值进入所述最终静默状态范围时，所述底层硬件采集单元启动一内部的硬件超时计时，且所述逻辑控制单元同步启动一独立的最终确认计时；当所述硬件超时计时达到一预设硬件超时时长时，所述底层硬件采集单元停止采集动作，以在所述第二系统内部生成一硬件停工事件；所述逻辑控制单元在捕获到所述硬件停工事件，且自身所述独立的最终确认计时达到所述最终确认时长后，执行对所述信号周期结束的最终界定；其中，所述最终确认时长的时间值大于所述预设硬件超时时长的时间值。</p>
+                <p>&emsp;&emsp;<strong>4. 根据权利要求1所述的信息解码方法</strong>，其特征在于，在所述特征提取步骤中，提取所述目标特征参数的具体过程为：识别在所述信号周期内发生的物理特征变化中所呈现出的一系列离散事件；针对每一个所述离散事件，仅当其感知值的变化成功通过一标准信号阈值的验证时，才将其计为一有效离散信号事件；累加所述信号周期内发生的所述有效离散信号事件的总次数值，并将该总次数值作为所述目标特征参数。</p>
+                <p>&emsp;&emsp;<strong>5. 根据权利要求1所述的信息解码方法</strong>，其特征在于，在所述特征提取步骤中，提取所述目标特征参数的具体过程为：所述物理特征变化表现为从一初始状态向一目标状态完成一特定演变过程；测量完成该特定演变过程所消耗的时间值，并将该时间值作为所述目标特征参数。</p>
+            `
+        };
+
+        const contentBox = document.getElementById('content-box');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+        // 核心交互逻辑：点击左侧，瞬间注入内容，无视网络延迟
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                // 1. 切换高亮状态
+                navLinks.forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+
+                // 2. 获取数据键值并注入内容
+                const key = this.getAttribute('data-key');
+                contentBox.innerHTML = claimsData[key];
             });
-            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-            element.classList.add('active');
-        }
-        // 初始化：默认加载说明书
-        window.onload = () => loadContent('specification.html', document.querySelector('.sidebar a'));
+        });
+
+        // 页面加载完毕后，默认显示“信号结束边界”
+        window.onload = () => {
+            contentBox.innerHTML = claimsData['boundary'];
+        };
     </script>
 </body>
 </html>
