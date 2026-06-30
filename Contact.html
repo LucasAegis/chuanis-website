@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>COMPLIANCE | CHUANIS</title>
+    
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     
     <link rel="stylesheet" href="assets/background.css">
     <link rel="stylesheet" href="assets/nav.css">
@@ -29,6 +31,7 @@
             text-align: left;
             backdrop-filter: blur(12px);
             margin-top: -50px; /* 轻微向上偏移，优化视觉重心 */
+            box-sizing: border-box;
         }
 
         .label { color: #887dff; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; display: block; }
@@ -40,6 +43,30 @@
         .info-value { font-size: 15px; color: #fff; font-family: monospace; }
         
         .footer-note { margin-top: 30px; font-size: 11px; color: #333; text-align: center; }
+
+        /* ==================== 移动端适配 ==================== */
+        @media (max-width: 900px) {
+            .contact-container {
+                height: auto; /* 解除高度限制，防止在小屏幕上内容被截断 */
+                min-height: calc(100vh - 120px); 
+                padding: 40px 15px;
+                overflow: visible; /* 允许小屏幕正常滑动 */
+            }
+            .contact-card {
+                padding: 30px 20px;
+                margin-top: 0; /* 移除向上偏移 */
+            }
+            .name {
+                font-size: 26px;
+            }
+            .role {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+            .info-value {
+                font-size: 13px; /* 适配长邮箱或网址 */
+            }
+        }
     </style>
 </head>
 <body>
