@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0118">
+    
     <title>CHUANIS | Patent Portfolio</title>
+    
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     
     <link rel="stylesheet" href="assets/background.css">
     <link rel="stylesheet" href="assets/nav.css">
@@ -110,6 +114,33 @@
         }
         
         @keyframes gridMove { 0% { transform: rotateX(75deg) translateY(0); } 100% { transform: rotateX(75deg) translateY(60px); } }
+
+        /* ==================== 优化3：首页内容的移动端适配 ==================== */
+        @media (max-width: 900px) {
+            .index-container {
+                padding: 60px 20px;
+                gap: 80px; /* 缩小两个专利模块之间的间距 */
+            }
+            .archive-label {
+                font-size: 20px; /* 缩小标签字体 */
+                margin-bottom: 10px;
+            }
+            .hero-title {
+                font-size: 38px; /* 缩小主标题字体 */
+            }
+            .hero-desc {
+                font-size: 15px; /* 缩小描述字体 */
+                margin-bottom: 30px;
+                padding: 0 10px; /* 增加一点内边距防止文字贴边 */
+            }
+            .glowing-btn {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+            .cyber-grid-container {
+                height: 40vh; /* 手机上降低网格的高度占比 */
+            }
+        }
     </style>
 </head>
 <body>
