@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PORTFOLIO | CHUANIS</title>
+    
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     
     <link rel="stylesheet" href="assets/background.css">
     <link rel="stylesheet" href="assets/nav.css">
@@ -30,6 +32,7 @@
             backdrop-filter: blur(12px);
             transition: all 0.4s ease;
             cursor: pointer;
+            box-sizing: border-box; /* 确保内边距不会撑破宽度 */
         }
 
         .patent-card:hover {
@@ -41,6 +44,24 @@
         .category-label { color: #887dff; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; display: block; }
         .patent-title { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 15px; }
         .patent-desc { font-size: 16px; color: #d2d0dd; line-height: 1.6; }
+
+        /* ==================== 移动端适配 ==================== */
+        @media (max-width: 900px) {
+            .portfolio-container {
+                padding: 40px 15px;
+                gap: 30px;
+            }
+            .patent-card {
+                padding: 30px 20px;
+            }
+            .patent-title {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .patent-desc {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
