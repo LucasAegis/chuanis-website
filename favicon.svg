@@ -3,11 +3,11 @@
     
     <path
         id="path"
-        d="M 54 24 L 30 78 L 54 66 L 78 78 L 54 24 Z"
+        d="M 54 12 L 20 88 L 54 71 L 88 88 Z"
         fill="#6200ee"/>
         
     <path
         id="path_1"
-        d="M 54 24 L 42 51 L 66 51 L 54 24 Z"
+        d="M 54 12 L 37 50 L 71 50 Z"
         fill="#ffffff33"/>
 </svg>
